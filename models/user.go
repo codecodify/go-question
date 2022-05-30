@@ -10,6 +10,6 @@ type User struct {
 	Email    string `gorm:"column:email;type:varchar(100)" json:"email"`
 }
 
-func (receiver User) TableName() string {
+func (u *User) TableName() string {
 	return "user"
 }

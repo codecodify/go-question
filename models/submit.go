@@ -11,6 +11,6 @@ type Submit struct {
 	Status          int    `gorm:"column:status;type:tinyint;" json:"status"`
 }
 
-func (s Submit) TableName() string {
+func (s *Submit) TableName() string {
 	return "submit"
 }

@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+	"gorm.io/gorm"
+)
 
 type Problem struct {
 	gorm.Model
@@ -11,6 +14,14 @@ type Problem struct {
 	TotalNum   int    `gorm:"column:total_num;type:int(11);" json:"total_num"`
 }
 
-func (p Problem) TableName() string {
+func (p *Problem) TableName() string {
 	return "problem"
+}
+
+func GetProblemList() {
+	var problems []*Problem
+	DB.Find(&problems)
+	for _, problem := range problems {
+		fmt.Println(problem)
+	}
 }

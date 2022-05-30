@@ -9,6 +9,6 @@ type Category struct {
 	ParentId int    `gorm:"column:parent_id;Index;" json:"parent_id"`
 }
 
-func (c Category) TableName() string {
+func (c *Category) TableName() string {
 	return "category"
 }
