@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -18,10 +17,6 @@ func (p *Problem) TableName() string {
 	return "problem"
 }
 
-func GetProblemList() {
-	var problems []*Problem
-	DB.Find(&problems)
-	for _, problem := range problems {
-		fmt.Println(problem)
-	}
+func GetProblemList(keyword string) *gorm.DB {
+	return DB.Model(new(Problem)).Where("title like ? OR content like ?", "%"+keyword+"%", "%"+keyword+"%")
 }

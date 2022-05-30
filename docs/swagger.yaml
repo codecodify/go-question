@@ -12,4 +12,31 @@ paths:
       summary: ping example
       tags:
       - example
+  /problems:
+    get:
+      parameters:
+      - description: 分页，默认1
+        in: query
+        name: page
+        type: integer
+      - description: 分页大小，默认15
+        in: query
+        name: size
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      responses:
+        "200":
+          description: 'status":"success","data":{"count": 1, "list": []}}'
+          schema:
+            type: object
+        "400":
+          description: status":"error","error":"错误信息"}
+          schema:
+            type: object
+      summary: 问题列表
+      tags:
+      - 问题
 swagger: "2.0"
