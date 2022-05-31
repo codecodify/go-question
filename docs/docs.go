@@ -234,6 +234,37 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/sendmail": {
+            "get": {
+                "tags": [
+                    "用户"
+                ],
+                "summary": "发送邮件",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "接收邮件地址",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status\":\"success\",\"data\":{}}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "status\":\"error\",\"error\":\"错误信息\"}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
         }
     }
 }`

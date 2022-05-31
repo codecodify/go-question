@@ -144,4 +144,24 @@ paths:
       summary: 用户登陆
       tags:
       - 用户
+  /user/sendmail:
+    get:
+      parameters:
+      - description: 接收邮件地址
+        in: query
+        name: email
+        required: true
+        type: string
+      responses:
+        "200":
+          description: status":"success","data":{}}
+          schema:
+            type: object
+        "400":
+          description: status":"error","error":"错误信息"}
+          schema:
+            type: object
+      summary: 发送邮件
+      tags:
+      - 用户
 swagger: "2.0"

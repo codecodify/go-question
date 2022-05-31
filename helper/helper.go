@@ -2,12 +2,15 @@ package helper
 
 import (
 	"crypto/md5"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"github.com/codecodify/go-question/define"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/jordan-wright/email"
 	"net/http"
+	"net/smtp"
 )
 
 func HandleError(ctx *gin.Context, err error, code int) {
@@ -59,4 +62,20 @@ func CheckUserToken(tokenString string) (*UserClaims, error) {
 		return nil, errors.New("token is invalid")
 	}
 	return claims, nil
+}
+
+// SendMail 发送邮件
+func SendMail(to, code string) error {
+	e := email.NewEmail()
+	e.From = "shaoxingliu@126.com"
+	e.To = []string{to}
+	e.Subject = "注册验证码"
+	e.Text = []byte(fmt.Sprintf("您好，您的验证码是：%s", code))
+	// todo 邮箱测试
+	return e.SendWithTLS("smtp.126.com:465",
+		smtp.PlainAuth("", "shaoxingliu@126.com", "FBJDYSEHDCVUNHRW", "smtp.126.com"),
+		&tls.Config{
+			InsecureSkipVerify: true,
+			ServerName:         "smtp.126.com",
+		})
 }

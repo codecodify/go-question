@@ -64,3 +64,27 @@ func Login(ctx *gin.Context) {
 		"token": token,
 	})
 }
+
+// SendMail 发送邮件
+// @Summary 发送邮件
+// @Tags 用户
+// @Param email query string true "接收邮件地址"
+// @Success 200 {object} object {"status":"success","data":{}}
+// @Failure 400 {object} object {"status":"error","error":"错误信息"}
+// @Router /user/sendmail [get]    //路由信息，一定要写上
+func SendMail(ctx *gin.Context) {
+	email := ctx.Query("email")
+	if len(email) == 0 {
+		helper.HandleError(ctx, errors.New("email is empty"), http.StatusBadRequest)
+		return
+	}
+
+	// 发送邮件
+	code := "123456"
+	err := helper.SendMail(email, code)
+	if err != nil {
+		helper.HandleError(ctx, err, http.StatusInternalServerError)
+		return
+	}
+	helper.HandleSuccess(ctx, gin.H{})
+}
