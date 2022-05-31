@@ -13,3 +13,9 @@ type User struct {
 func (u *User) TableName() string {
 	return "user"
 }
+
+func FindUserByIdentity(identity string) (*User, error) {
+	var user User
+	err := DB.Model(new(User)).Where("identity = ?", identity).First(&user).Error
+	return &user, err
+}

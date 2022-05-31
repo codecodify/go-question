@@ -111,6 +111,37 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/detail": {
+            "get": {
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户标识",
+                        "name": "identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status\":\"success\",\"data\":{}}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "status\":\"error\",\"error\":\"错误信息\"}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
         }
     }
 }`
