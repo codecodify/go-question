@@ -19,3 +19,9 @@ func FindUserByIdentity(identity string) (*User, error) {
 	err := DB.Model(new(User)).Where("identity = ?", identity).First(&user).Error
 	return &user, err
 }
+
+func Login(name, password string) (*User, error) {
+	var user User
+	err := DB.Model(new(User)).Where("name = ? AND password = ?", name, password).First(&user).Error
+	return &user, err
+}

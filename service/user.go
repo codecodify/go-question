@@ -5,6 +5,7 @@ import (
 	"github.com/codecodify/go-question/helper"
 	"github.com/codecodify/go-question/models"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -27,4 +28,39 @@ func FindUserByIdentity(ctx *gin.Context) {
 		return
 	}
 	helper.HandleSuccess(ctx, user)
+}
+
+// Login
+// @Summary 用户登陆
+// @Tags 用户
+// @Param name formData string true "用户名"
+// @Param password formData string true "密码"
+// @Success 200 {object} object {"status":"success","data":{}}
+// @Failure 400 {object} object {"status":"error","error":"错误信息"}
+// @Router /user/login [post]    //路由信息，一定要写上
+func Login(ctx *gin.Context) {
+	name := ctx.PostForm("name")
+	password := ctx.PostForm("password")
+	if len(name) == 0 || len(password) == 0 {
+		helper.HandleError(ctx, errors.New("name or password is empty"), http.StatusBadRequest)
+		return
+	}
+	user, err := models.Login(name, helper.Md5(password))
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			helper.HandleError(ctx, errors.New("用户名或密码错误"), http.StatusBadRequest)
+			return
+		}
+		helper.HandleError(ctx, err, http.StatusInternalServerError)
+	}
+
+	// 生成密钥
+	token, err := helper.GetUserToken(user.Identity, user.Name)
+	if err != nil {
+		helper.HandleError(ctx, err, http.StatusBadRequest)
+		return
+	}
+	helper.HandleSuccess(ctx, gin.H{
+		"token": token,
+	})
 }
