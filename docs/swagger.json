@@ -100,6 +100,60 @@
                 }
             }
         },
+        "/submits": {
+            "get": {
+                "tags": [
+                    "提交"
+                ],
+                "summary": "提交列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "问题标识",
+                        "name": "problem_identity",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户标识",
+                        "name": "user_identity",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "分页，默认1",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "分页大小，默认15",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status\":\"success\",\"data\":{\"count\": 1, \"list\": []}}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "status\":\"error\",\"error\":\"错误信息\"}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/user/detail": {
             "get": {
                 "tags": [

@@ -64,6 +64,41 @@ paths:
       summary: 问题列表
       tags:
       - 问题
+  /submits:
+    get:
+      parameters:
+      - description: 问题标识
+        in: query
+        name: problem_identity
+        type: string
+      - description: 用户标识
+        in: query
+        name: user_identity
+        type: string
+      - description: 状态
+        in: query
+        name: status
+        type: integer
+      - description: 分页，默认1
+        in: query
+        name: page
+        type: integer
+      - description: 分页大小，默认15
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: 'status":"success","data":{"count": 1, "list": []}}'
+          schema:
+            type: object
+        "400":
+          description: status":"error","error":"错误信息"}
+          schema:
+            type: object
+      summary: 提交列表
+      tags:
+      - 提交
   /user/detail:
     get:
       parameters:

@@ -21,6 +21,9 @@ func Router() *gin.Engine {
 	// 用户详情
 	r.GET("/user/detail", service.FindUserByIdentity)
 
+	// 提交列表
+	r.GET("/submits", service.GetSubmitList)
+
 	// 配置swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
