@@ -12,6 +12,27 @@ paths:
       summary: ping example
       tags:
       - example
+  /problem/detail:
+    get:
+      parameters:
+      - description: 问题标识
+        in: query
+        name: identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 'status":"success","data":{"id": 1, "identity": "", "title":
+            "", "content": "", "total_num": 0, "problem_categories": []}}'
+          schema:
+            type: object
+        "400":
+          description: status":"error","error":"错误信息"}
+          schema:
+            type: object
+      summary: 问题详情
+      tags:
+      - 问题
   /problems:
     get:
       parameters:
@@ -26,6 +47,10 @@ paths:
       - description: 关键字
         in: query
         name: keyword
+        type: string
+      - description: 分类标识
+        in: query
+        name: category_identity
         type: string
       responses:
         "200":

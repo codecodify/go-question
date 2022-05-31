@@ -13,7 +13,10 @@ func Router() *gin.Engine {
 
 	// 配置路由规则
 	r.GET("/", service.Ping)
+	// 问题列表
 	r.GET("/problems", service.GetProblemList)
+	// 问题详情
+	r.GET("/problem/detail", service.FindProblemByIdentity)
 
 	// 配置swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

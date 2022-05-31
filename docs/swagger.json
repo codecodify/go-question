@@ -21,6 +21,37 @@
                 }
             }
         },
+        "/problem/detail": {
+            "get": {
+                "tags": [
+                    "问题"
+                ],
+                "summary": "问题详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "问题标识",
+                        "name": "identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status\":\"success\",\"data\":{\"id\": 1, \"identity\": \"\", \"title\": \"\", \"content\": \"\", \"total_num\": 0, \"problem_categories\": []}}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "status\":\"error\",\"error\":\"错误信息\"}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
         "/problems": {
             "get": {
                 "tags": [
@@ -44,6 +75,12 @@
                         "type": "string",
                         "description": "关键字",
                         "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "分类标识",
+                        "name": "category_identity",
                         "in": "query"
                     }
                 ],

@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS `problem`
 (
     `id`          int UNSIGNED NOT NULL AUTO_INCREMENT,
     `identity`    varchar(36) NULL COMMENT '唯一标识',
-    `category_id` varchar(255) NULL COMMENT '以逗号分隔的分类id',
     `title`       varchar(255) NULL COMMENT '问题题目',
     `content`     text NULL COMMENT '问题正文描述',
     `total_num`   int(11) NULL DEFAULT 0 COMMENT '总共提交个数',
@@ -56,4 +55,18 @@ create table IF NOT EXISTS `submit`
     INDEX `problem_identity`(`problem_identity`) USING BTREE,
     INDEX `user_identity`(`user_identity`) USING BTREE,
     UNIQUE INDEX `identity`(`identity`) USING BTREE
+);
+
+
+create table IF NOT EXISTS `problem_category`
+(
+    `id`       int unsigned not null auto_increment,
+    `problem_id` int default 0 COMMENT '问题id',
+    `category_id` int default 0 comment '分类id',
+    `created_at` datetime NULL default null COMMENT '创建时间',
+    `updated_at` datetime NULL default null COMMENT '操作时间',
+    `deleted_at` datetime NULL default null COMMENT '删除时间，软删除',
+    PRIMARY KEY (`id`),
+    INDEX `problem_id`(`problem_id`) USING BTREE,
+    INDEX `category_id`(`category_id`) USING BTREE
 );
