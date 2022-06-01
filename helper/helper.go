@@ -75,9 +75,8 @@ func SendMail(to, code string) error {
 	e.To = []string{to}
 	e.Subject = "注册验证码"
 	e.Text = []byte(fmt.Sprintf("您好，您的验证码是：%s", code))
-	// todo 邮箱测试
 	return e.SendWithTLS("smtp.126.com:465",
-		smtp.PlainAuth("", "shaoxingliu@126.com", "FBJDYSEHDCVUNHRW", "smtp.126.com"),
+		smtp.PlainAuth("", "邮箱用户名", "邮箱密码", "smtp.126.com"),
 		&tls.Config{
 			InsecureSkipVerify: true,
 			ServerName:         "smtp.126.com",
