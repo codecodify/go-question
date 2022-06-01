@@ -144,6 +144,29 @@ paths:
       summary: 用户登陆
       tags:
       - 用户
+  /user/rank:
+    get:
+      parameters:
+      - description: 分页，默认1
+        in: query
+        name: page
+        type: integer
+      - description: 分页大小，默认15
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: status":"success","data":{}}
+          schema:
+            type: object
+        "400":
+          description: status":"error","error":"错误信息"}
+          schema:
+            type: object
+      summary: 用户排行榜
+      tags:
+      - 用户
   /user/register:
     post:
       parameters:

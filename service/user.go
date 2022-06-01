@@ -2,11 +2,13 @@ package service
 
 import (
 	"errors"
+	"github.com/codecodify/go-question/define"
 	"github.com/codecodify/go-question/helper"
 	"github.com/codecodify/go-question/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
+	"strconv"
 )
 
 // FindUserByIdentity
@@ -154,4 +156,36 @@ func SendMail(ctx *gin.Context) {
 		return
 	}
 	helper.HandleSuccess(ctx, gin.H{})
+}
+
+// GetRankList 用户排行榜
+// @Summary 用户排行榜
+// @Tags 用户
+// @Param page query int false "分页，默认1"
+// @Param size query int false "分页大小，默认15"
+// @Success 200 {object} object {"status":"success","data":{}}
+// @Failure 400 {object} object {"status":"error","error":"错误信息"}
+// @Router /user/rank [get]    //路由信息，一定要写上
+func GetRankList(ctx *gin.Context) {
+	page, err := strconv.Atoi(ctx.DefaultQuery("page", define.DefaultPage))
+	if err != nil {
+		helper.HandleError(ctx, err, http.StatusBadRequest)
+		return
+	}
+	size, err := strconv.Atoi(ctx.DefaultQuery("size", define.DefaultSize))
+	if err != nil {
+		helper.HandleError(ctx, err, http.StatusBadRequest)
+		return
+	}
+
+	// 获取排行榜
+	db := models.GetRankList()
+	var rankList []models.User
+	var count int64
+	db.Count(&count).Omit("password").Offset((page - 1) * size).Limit(size).Find(&rankList)
+	helper.HandleSuccess(ctx, gin.H{
+		"count": count,
+		"list":  rankList,
+	})
+
 }

@@ -26,6 +26,8 @@ func Router() *gin.Engine {
 	r.GET("/user/sendmail", service.SendMail)
 	// 用户注册
 	r.POST("/user/register", service.Register)
+	// 排行榜
+	r.GET("/user/rank", service.GetRankList)
 
 	// 提交列表
 	r.GET("/submits", service.GetSubmitList)
