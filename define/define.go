@@ -5,4 +5,5 @@ var (
 	DefaultSize         = "15"
 	DefaultSubmitStatus = "-1"
 	DefaultTokenKey     = "token"
+	DefaultTokenExpire  = 300 // 秒
 )

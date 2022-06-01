@@ -6,11 +6,15 @@ import (
 	"errors"
 	"fmt"
 	"github.com/codecodify/go-question/define"
+	"github.com/codecodify/go-question/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/jordan-wright/email"
+	uuid "github.com/satori/go.uuid"
+	"math/rand"
 	"net/http"
 	"net/smtp"
+	"time"
 )
 
 func HandleError(ctx *gin.Context, err error, code int) {
@@ -78,4 +82,29 @@ func SendMail(to, code string) error {
 			InsecureSkipVerify: true,
 			ServerName:         "smtp.126.com",
 		})
+}
+
+// GetUUID 获取uuid
+func GetUUID() string {
+	return uuid.NewV4().String()
+}
+
+// GetRandomCode 生成随机验证码
+func GetRandomCode() string {
+	code := ""
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < 6; i++ {
+		code += fmt.Sprintf("%d", rand.Intn(10))
+	}
+	return code
+}
+
+// SetRedisString 在redis存储字符串
+func SetRedisString(key, value string) error {
+	return models.Redis.Set(models.RedisCtx, key, value, time.Duration(define.DefaultTokenExpire)*time.Second).Err()
+}
+
+// GetRedisString 在redis获取字符串
+func GetRedisString(key string) (string, error) {
+	return models.Redis.Get(models.RedisCtx, key).Result()
 }

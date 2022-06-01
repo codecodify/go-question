@@ -65,6 +65,67 @@ func Login(ctx *gin.Context) {
 	})
 }
 
+// Register 用户注册
+// @Summary 用户注册
+// @Tags 用户
+// @Param name formData string true "用户名"
+// @Param password formData string true "密码"
+// @Param email formData string true "邮箱"
+// @Param phone formData string true "手机"
+// @Param code formData string true "验证码"
+// @Success 200 {object} object {"status":"success","data":{}}
+// @Failure 400 {object} object {"status":"error","error":"错误信息"}
+// @Router /user/register [post]    //路由信息，一定要写上
+func Register(ctx *gin.Context) {
+	name := ctx.PostForm("name")
+	password := ctx.PostForm("password")
+	email := ctx.PostForm("email")
+	code := ctx.PostForm("code")
+	phone := ctx.PostForm("phone")
+	if len(name) == 0 || len(password) == 0 || len(email) == 0 || len(code) == 0 || len(phone) == 0 {
+		helper.HandleError(ctx, errors.New("name or password or email or code or phone is empty"), http.StatusBadRequest)
+		return
+	}
+
+	// 判断名称是否占用
+	if models.GetUserByName(name) {
+		helper.HandleError(ctx, errors.New("用户名已被占用"), http.StatusBadRequest)
+		return
+	}
+
+	// 判断邮箱是否占用
+	if models.GetUserByEmail(email) {
+		helper.HandleError(ctx, errors.New("邮箱已被占用"), http.StatusBadRequest)
+		return
+	}
+
+	// 校验验证码
+	redisCode, err := helper.GetRedisString(email)
+	if err != nil {
+		helper.HandleError(ctx, errors.New("验证码已过期"), http.StatusBadRequest)
+		return
+	}
+	if redisCode != code {
+		helper.HandleError(ctx, errors.New("验证码错误"), http.StatusBadRequest)
+		return
+	}
+
+	// 创建用户
+	user := models.User{
+		Name:     name,
+		Password: helper.Md5(password),
+		Email:    email,
+		Identity: helper.GetUUID(),
+		Phone:    phone,
+	}
+	err = models.CreateUser(&user)
+	if err != nil {
+		helper.HandleError(ctx, err, http.StatusInternalServerError)
+		return
+	}
+	helper.HandleSuccess(ctx, gin.H{})
+}
+
 // SendMail 发送邮件
 // @Summary 发送邮件
 // @Tags 用户
@@ -80,8 +141,14 @@ func SendMail(ctx *gin.Context) {
 	}
 
 	// 发送邮件
-	code := "123456"
+	code := helper.GetRandomCode()
 	err := helper.SendMail(email, code)
+	if err != nil {
+		helper.HandleError(ctx, err, http.StatusInternalServerError)
+		return
+	}
+	// 将验证码存储到redis
+	err = helper.SetRedisString(email, code)
 	if err != nil {
 		helper.HandleError(ctx, err, http.StatusInternalServerError)
 		return

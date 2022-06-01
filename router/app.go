@@ -24,6 +24,8 @@ func Router() *gin.Engine {
 	r.POST("/user/login", service.Login)
 	// 发送邮箱
 	r.GET("/user/sendmail", service.SendMail)
+	// 用户注册
+	r.POST("/user/register", service.Register)
 
 	// 提交列表
 	r.GET("/submits", service.GetSubmitList)

@@ -144,6 +144,46 @@ paths:
       summary: 用户登陆
       tags:
       - 用户
+  /user/register:
+    post:
+      parameters:
+      - description: 用户名
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 邮箱
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: 手机
+        in: formData
+        name: phone
+        required: true
+        type: string
+      - description: 验证码
+        in: formData
+        name: code
+        required: true
+        type: string
+      responses:
+        "200":
+          description: status":"success","data":{}}
+          schema:
+            type: object
+        "400":
+          description: status":"error","error":"错误信息"}
+          schema:
+            type: object
+      summary: 用户注册
+      tags:
+      - 用户
   /user/sendmail:
     get:
       parameters:
